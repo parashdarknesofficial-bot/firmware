@@ -230,7 +230,26 @@ jobs:
             firmware.bin
           retention-days: 1
           
-      - name: Upload ${{ matrix.board.env }}
+     - name: Copy separate binary files
+        if: matrix.board.env == 'esp32-s3-devkitc-1-psram'
+        run: |
+          cp .pio/build/${{ matrix.board.env }}/bootloader.bin ./bootloader.bin
+          cp .pio/build/${{ matrix.board.env }}/partitions.bin ./partitions.bin
+          cp .pio/build/${{ matrix.board.env }}/firmware.bin ./firmware.bin
+          find ~/.platformio -name "boot_app0.bin" -exec cp {} ./boot_app0.bin \;
+
+      - name: Upload separate files ${{ matrix.board.env }}
+        if: matrix.board.env == 'esp32-s3-devkitc-1-psram'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bruce-${{ matrix.board.env }}-separate-files
+          path: |
+            bootloader.bin
+            partitions.bin
+            boot_app0.bin
+            firmware.bin
+          retention-days: 1
+          - name: Upload ${{ matrix.board.env }}
 
         uses: actions/upload-artifact@v4
         with:
