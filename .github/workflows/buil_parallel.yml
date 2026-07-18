@@ -1,5 +1,5 @@
-          sudo apt-get install---
-name: Build and Push Releases
+
+     name: Build and Push Releases
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
